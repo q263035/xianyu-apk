@@ -27,6 +27,10 @@ import json
 import os
 
 # 设置窗口大小（仅桌面测试用，安卓自动全屏）
+# 注册中文字体（安卓系统内置）
+from kivy.core.text import LabelBase
+LabelBase.register(name='Roboto', fn_regular='DroidSansFallbackFull.ttf')
+LabelBase.register(name='DroidSansFallback', fn_regular='DroidSansFallbackFull.ttf')
 Window.size = (400, 700)
 
 # 数据存储文件

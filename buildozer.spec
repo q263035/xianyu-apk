@@ -7,10 +7,10 @@ title = 闲鱼商品监控器
 package.name = xianyuviewer
 
 # 包版本
-package.version = 1.3.0
+package.version = 1.7.0
 
 # 版本号（必须）
-version = 1.3.0
+version = 1.7.0
 
 # 包域名（反向域名格式）
 package.domain = org.user
