@@ -969,12 +969,6 @@ class XianyuApp(App):
     """应用主类"""
     
     def build(self):
-# 启动时打开闲鱼 APP
-    try:
-        from android.browser import open_url
-        open_url('https://2.taobao.com')
-    except:
-        pass
         self.title = '闲鱼商品监控器'
         
         # 创建屏幕管理器
