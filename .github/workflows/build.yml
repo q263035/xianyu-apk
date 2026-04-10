@@ -51,7 +51,11 @@ jobs:
 
       - name: Configure Buildozer to use system SDK
         run: |
-          # 删除可能存在的旧目录
+          # 创建完整的目录结构
+          echo "=== 创建目录结构 ==="
+          mkdir -p ~/.buildozer/android/platform
+          
+          # 删除可能存在的旧目录或符号链接
           rm -rf ~/.buildozer/android/platform/android-sdk
           
           # 创建符号链接
@@ -70,7 +74,7 @@ jobs:
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/25.1.8937393
         run: |
-          # 设置 PATH（在 run 中，不是在 env 中）
+          # 设置 PATH
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.0:$PATH
           
           echo "=== 环境变量 ==="
@@ -78,7 +82,6 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
-          echo "PATH=$PATH"
           
           echo "=== 验证符号链接 ==="
           ls -la ~/.buildozer/android/platform/android-sdk/
