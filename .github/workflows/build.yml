@@ -22,37 +22,9 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev
+          sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev openjdk-11-jdk
           pip3 install --upgrade pip
           pip3 install buildozer cython
-
-      - name: Install Android SDK components
-        run: |
-          # 使用 GitHub 预装的 Android SDK
-          export ANDROID_HOME=/usr/local/lib/android/sdk
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          
-          # 安装 build-tools 和 NDK
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools" "ndk;25.1.8937393"
-          
-          # 创建 Buildozer 期望的目录结构
-          mkdir -p ~/.buildozer/android/platform/android-sdk
-          
-          # 创建 tools 目录和 sdkmanager 符号链接
-          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
-          ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          
-          # 链接 build-tools
-          ln -s $ANDROID_HOME/build-tools ~/.buildozer/android/platform/android-sdk/build-tools
-          
-          # 链接 platforms
-          ln -s $ANDROID_HOME/platforms ~/.buildozer/android/platform/android-sdk/platforms
-          
-          # 链接 platform-tools
-          ln -s $ANDROID_HOME/platform-tools ~/.buildozer/android/platform/android-sdk/platform-tools
-          
-          # 链接 NDK
-          ln -s $ANDROID_HOME/ndk ~/.buildozer/android/platform/android-sdk/ndk
 
       - name: Build APK
         env:
@@ -60,17 +32,15 @@ jobs:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/25.1.8937393
+          PATH: /usr/local/lib/android/sdk/cmdline-tools/latest/bin:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/33.0.0:$PATH
         run: |
           echo "JAVA_HOME=$JAVA_HOME"
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
           
-          # Verify sdkmanager exists
-          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          
-          # Verify build-tools
-          ls -la $ANDROID_HOME/build-tools/
+          # 确认 sdkmanager 可用
+          which sdkmanager || echo "sdkmanager not in PATH"
+          sdkmanager --version || echo "sdkmanager version check failed"
           
           # Build
           buildozer android debug
