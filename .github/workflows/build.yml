@@ -19,13 +19,21 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 33
+          build-tools-version: 33.0.0
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip python3-venv git zip unzip openjdk-11-jdk autoconf automake build-essential libssl-dev libffi-dev python3-dev
+          sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential
           pip3 install buildozer cython
 
       - name: Build APK
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
         run: |
           buildozer android debug
 
