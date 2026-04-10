@@ -22,7 +22,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev openjdk-11-jdk
+          sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev openjdk-17-jdk
           pip3 install --upgrade pip
           pip3 install buildozer cython
 
@@ -37,9 +37,8 @@ jobs:
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/25.1.8937393
-          sdkmanager --update
           
-          # 关键：链接 build-tools 到 Buildozer 期望的位置
+          # 链接 build-tools 到 Buildozer 期望的位置
           mkdir -p ~/.buildozer/android/platform
           ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
 
