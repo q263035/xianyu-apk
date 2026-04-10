@@ -55,15 +55,18 @@ jobs:
           echo "=== 创建目录结构 ==="
           mkdir -p ~/.buildozer/android/platform
           
-          # 删除可能存在的旧目录
+          # 删除可能存在的旧目录和符号链接
+          echo "=== 清理旧目录 ==="
           rm -rf ~/.buildozer/android/platform/android-sdk
           
           # 创建主符号链接
-          ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
+          echo "=== 创建主符号链接 ==="
+          ln -sf $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
           
-          # 创建 tools/bin/sdkmanager 符号链接（Buildozer 期望的位置）
+          # 创建 tools/bin 目录和 sdkmanager 符号链接
+          echo "=== 创建 tools/bin/sdkmanager 符号链接 ==="
           mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
-          ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+          ln -sf $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
           
           # 验证符号链接
           echo "=== 验证符号链接 ==="
