@@ -27,6 +27,7 @@ import json
 import os
 
 # # 设置窗口大小（仅桌面测试用，安卓自动全屏）
+Window.size = (400, 700)
 
 # 数据存储文件
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'item_ids.json')
@@ -1012,4 +1013,3 @@ class XianyuApp(App):
 
 if __name__ == '__main__':
     XianyuApp().run()
-# Window.size = (400, 700)  # 安卓自动全屏
