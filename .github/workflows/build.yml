@@ -26,6 +26,11 @@ jobs:
           pip3 install --upgrade pip
           pip3 install buildozer cython
 
+      - name: Set JAVA_HOME
+        run: |
+          echo "JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64" >> $GITHUB_ENV
+          echo "JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64"
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -36,24 +41,14 @@ jobs:
           # 接受许可证
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           
-          # 安装组件（逐个安装）
-          echo "=== 安装 platform-tools ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools"
-          
-          echo "=== 安装 platforms ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-33"
-          
-          echo "=== 安装 build-tools ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;33.0.0"
-          
-          echo "=== 安装 NDK ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.1.8937393"
+          # 安装组件
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
           
           # 验证
           echo "=== 验证安装 ==="
           ls -la $ANDROID_HOME/build-tools/
-          ls -la $ANDROID_HOME/build-tools/33.0.0/
-          file $ANDROID_HOME/build-tools/33.0.0/aidl
+          ls -la $ANDROID_HOME/build-tools/33.0.0/ || echo "33.0.0 not found"
+          file $ANDROID_HOME/build-tools/33.0.0/aidl || echo "aidl not found"
 
       - name: Build APK
         env:
