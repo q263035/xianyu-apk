@@ -28,9 +28,12 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        env:
+          SKIP_JDK_VERSION_CHECK: true
 
       - name: Install SDK components
         run: |
+          export SKIP_JDK_VERSION_CHECK=true
           sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools" "ndk;25.1.8937393"
 
       - name: Build APK
