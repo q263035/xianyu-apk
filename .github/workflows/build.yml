@@ -24,9 +24,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev openjdk-17-jdk
           pip3 install --upgrade pip
-          pip3 install buildozer cython
-          # 安装最新版本的 pyjnius（修复 Python 3 兼容性）
-          pip3 install pyjnius --upgrade
+          # 安装特定版本的 buildozer 和 cython
+          pip3 install buildozer==1.5.0 cython==3.0.8
+          # 安装兼容 Python 3 的 pyjnius 版本
+          pip3 install pyjnius==1.6.1
 
       - name: Set JAVA_HOME
         run: |
@@ -50,6 +51,14 @@ jobs:
           echo "=== 验证安装 ==="
           ls -la $ANDROID_HOME/build-tools/33.0.0/
           file $ANDROID_HOME/build-tools/33.0.0/aidl
+
+      - name: Clean Buildozer cache
+        run: |
+          # 清理旧的构建缓存
+          echo "=== 清理缓存 ==="
+          rm -rf .buildozer
+          rm -rf ~/.buildozer/android/packages
+          rm -rf ~/.buildozer/android/platform/build-*
 
       - name: Configure Buildozer to use system SDK
         run: |
