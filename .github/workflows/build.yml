@@ -25,6 +25,8 @@ jobs:
           sudo apt-get install -y python3-pip git zip unzip autoconf automake build-essential libssl-dev libffi-dev python3-dev openjdk-17-jdk
           pip3 install --upgrade pip
           pip3 install buildozer cython
+          # 安装最新版本的 pyjnius（修复 Python 3 兼容性）
+          pip3 install pyjnius --upgrade
 
       - name: Set JAVA_HOME
         run: |
@@ -55,15 +57,20 @@ jobs:
           echo "=== 创建目录结构 ==="
           mkdir -p ~/.buildozer/android/platform
           
-          # 删除可能存在的旧目录和符号链接
+          # 删除可能存在的旧目录
           echo "=== 清理旧目录 ==="
           rm -rf ~/.buildozer/android/platform/android-sdk
+          rm -rf ~/.buildozer/android/platform/android-ndk-r25b
           
-          # 创建主符号链接
-          echo "=== 创建主符号链接 ==="
+          # 创建 SDK 符号链接
+          echo "=== 创建 SDK 符号链接 ==="
           ln -sf $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
           
-          # 创建 tools/bin 目录和 sdkmanager 符号链接
+          # 创建 NDK 符号链接
+          echo "=== 创建 NDK 符号链接 ==="
+          ln -sf $ANDROID_HOME/ndk/25.1.8937393 ~/.buildozer/android/platform/android-ndk-r25b
+          
+          # 创建 tools/bin/sdkmanager 符号链接
           echo "=== 创建 tools/bin/sdkmanager 符号链接 ==="
           mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
           ln -sf $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
@@ -72,7 +79,8 @@ jobs:
           echo "=== 验证符号链接 ==="
           ls -la ~/.buildozer/android/platform/
           ls -la ~/.buildozer/android/platform/android-sdk/
-          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/
+          ls -la ~/.buildozer/android/platform/android-ndk-r25b/
+          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
           ls -la ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl
 
       - name: Build APK
@@ -93,10 +101,7 @@ jobs:
           
           echo "=== 验证符号链接 ==="
           ls -la ~/.buildozer/android/platform/android-sdk/
-          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          
-          echo "=== 验证 AIDL ==="
-          find ~/.buildozer/android/platform/android-sdk -name "aidl" -type f
+          ls -la ~/.buildozer/android/platform/android-ndk-r25b/
           
           echo "=== 开始编译 ==="
           buildozer android debug
