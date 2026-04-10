@@ -1,0 +1,10 @@
+# Kivy 界面样式文件
+# 与 main.py 配合使用，定义更精细的 UI 样式
+
+<XianyuApp>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # 白色背景
+        Rectangle:
+            pos: self.pos
+            size: self.size

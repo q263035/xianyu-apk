@@ -1,0 +1,11 @@
+# Check configuration tokens
+# Ensure build layout
+# Check configuration tokens
+# Preparing build
+# Check requirements for android
+# Search for Git (git)
+#  -> found at /usr/bin/git
+# Search for Cython (cython)
+#  -> found at /home/admin/.local/bin/cython
+# Search for Java compiler (javac)
+# Java compiler (javac) not found, please install it.

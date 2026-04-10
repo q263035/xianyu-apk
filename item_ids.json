@@ -1,0 +1,10 @@
+{
+  "item_ids": ["628394756", "739485012", "840596123"],
+  "interval": 10,
+  "account_type": "personal",
+  "auto_buy": false,
+  "retry_delay": 600,
+  "max_retries": 3,
+  "loop_count": 3,
+  "loop_interval": 60
+}
