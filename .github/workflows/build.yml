@@ -29,29 +29,30 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android Build Tools and Platforms
+      - name: Install Android Build Tools, Platforms and NDK
         run: |
-          sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools"
+          sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools" "ndk;25.1.8937393"
 
       - name: Configure Android SDK for Buildozer
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/25.1.8937393
           sdkmanager --update
 
       - name: Build APK
         env:
           ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/25.1.8937393
         run: |
-          # 确认环境
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
           
-          # 确认 build-tools 已安装
+          # Verify build-tools installation
           ls -la $ANDROID_HOME/build-tools/
           
-          # 编译
+          # Run buildozer
           buildozer android debug
 
       - name: Upload APK
