@@ -35,9 +35,24 @@ jobs:
           # 安装 build-tools 和 NDK
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools" "ndk;25.1.8937393"
           
-          # 创建符号链接到 Buildozer 期望的位置
-          mkdir -p ~/.buildozer/android/platform
-          ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
+          # 创建 Buildozer 期望的目录结构
+          mkdir -p ~/.buildozer/android/platform/android-sdk
+          
+          # 创建 tools 目录和 sdkmanager 符号链接
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+          ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+          
+          # 链接 build-tools
+          ln -s $ANDROID_HOME/build-tools ~/.buildozer/android/platform/android-sdk/build-tools
+          
+          # 链接 platforms
+          ln -s $ANDROID_HOME/platforms ~/.buildozer/android/platform/android-sdk/platforms
+          
+          # 链接 platform-tools
+          ln -s $ANDROID_HOME/platform-tools ~/.buildozer/android/platform/android-sdk/platform-tools
+          
+          # 链接 NDK
+          ln -s $ANDROID_HOME/ndk ~/.buildozer/android/platform/android-sdk/ndk
 
       - name: Build APK
         env:
@@ -50,6 +65,9 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
+          
+          # Verify sdkmanager exists
+          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
           
           # Verify build-tools
           ls -la $ANDROID_HOME/build-tools/
