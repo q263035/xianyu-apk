@@ -51,20 +51,25 @@ jobs:
 
       - name: Configure Buildozer to use system SDK
         run: |
-          # 创建完整的目录结构
+          # 创建 Buildozer 期望的目录结构
           echo "=== 创建目录结构 ==="
           mkdir -p ~/.buildozer/android/platform
           
-          # 删除可能存在的旧目录或符号链接
+          # 删除可能存在的旧目录
           rm -rf ~/.buildozer/android/platform/android-sdk
           
-          # 创建符号链接
+          # 创建主符号链接
           ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
+          
+          # 创建 tools/bin/sdkmanager 符号链接（Buildozer 期望的位置）
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+          ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
           
           # 验证符号链接
           echo "=== 验证符号链接 ==="
           ls -la ~/.buildozer/android/platform/
           ls -la ~/.buildozer/android/platform/android-sdk/
+          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/
           ls -la ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl
 
       - name: Build APK
@@ -85,6 +90,7 @@ jobs:
           
           echo "=== 验证符号链接 ==="
           ls -la ~/.buildozer/android/platform/android-sdk/
+          ls -la ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
           
           echo "=== 验证 AIDL ==="
           find ~/.buildozer/android/platform/android-sdk -name "aidl" -type f
