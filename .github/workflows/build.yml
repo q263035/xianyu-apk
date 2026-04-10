@@ -26,21 +26,32 @@ jobs:
           pip3 install --upgrade pip
           pip3 install buildozer cython
 
+      - name: Install Android SDK components
+        run: |
+          # 使用 GitHub 预装的 Android SDK
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          
+          # 安装 build-tools 和 NDK
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools" "ndk;25.1.8937393"
+
       - name: Build APK
         env:
           JAVA_HOME: /usr/lib/jvm/temurin-11-jdk-amd64
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/25.1.8937393
-          PATH: /usr/local/lib/android/sdk/cmdline-tools/latest/bin:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/33.0.0:$PATH
         run: |
           echo "JAVA_HOME=$JAVA_HOME"
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
           
-          # 确认 sdkmanager 可用
-          which sdkmanager || echo "sdkmanager not in PATH"
-          sdkmanager --version || echo "sdkmanager version check failed"
+          # Verify sdkmanager
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --version
+          
+          # Verify build-tools
+          ls -la $ANDROID_HOME/build-tools/
           
           # Build
           buildozer android debug
