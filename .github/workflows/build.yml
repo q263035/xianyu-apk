@@ -48,13 +48,11 @@ jobs:
           echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           echo "ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/25.1.8937393" >> $GITHUB_ENV
           
-          # 创建 Buildozer 配置文件，指定使用系统 SDK
+          # 创建 Buildozer 配置文件
           mkdir -p ~/.buildozer
-          cat > ~/.buildozer/config << EOF
-[buildozer]
-sdk = /usr/local/lib/android/sdk
-ndk = /usr/local/lib/android/sdk/ndk/25.1.8937393
-EOF
+          echo "[buildozer]" > ~/.buildozer/config
+          echo "sdk = /usr/local/lib/android/sdk" >> ~/.buildozer/config
+          echo "ndk = /usr/local/lib/android/sdk/ndk/25.1.8937393" >> ~/.buildozer/config
 
       - name: Build APK
         env:
