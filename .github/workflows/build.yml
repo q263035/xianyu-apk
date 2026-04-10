@@ -38,13 +38,22 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME"
           
-          # 接受所有许可证（使用 --force 参数）
+          # 接受所有许可证（使用 yes 管道）
           echo "=== 接受许可证 ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses --force || true
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
           
-          # 安装组件（使用 --force 参数）
-          echo "=== 安装组件 ==="
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393" --force
+          # 安装组件
+          echo "=== 安装 platform-tools ==="
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+          
+          echo "=== 安装 platforms ==="
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33"
+          
+          echo "=== 安装 build-tools ==="
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.0"
+          
+          echo "=== 安装 NDK ==="
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393"
           
           # 验证安装
           echo "=== 验证安装 ==="
